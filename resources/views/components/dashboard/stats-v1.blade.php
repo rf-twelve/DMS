@@ -102,15 +102,15 @@
         <li class="relative flex col-span-1 rounded-md shadow-sm">
             <div
                 class="flex items-center justify-center flex-shrink-0 w-16 text-sm font-medium text-white bg-teal-500 rounded-l-md">
-                <x-icon.envelop class="flex-shrink-0 w-6 h-6 text-white" />
+                <x-icon.bell class="flex-shrink-0 w-6 h-6 text-white" />
             </div>
             <div
                 class="flex items-center justify-between flex-1 truncate bg-white border-t border-b border-r border-gray-200 rounded-r-md">
                 <div class="flex-1 px-4 py-2 text-sm truncate">
                     <a href="#" class="font-medium text-gray-900 hover:text-gray-600">
-                        Messages
+                        Notification
                     </a>
-                    <p class="text-gray-500">12 Records</p>
+                    <p class="text-gray-500">0 Records</p>
                 </div>
                 <div x-data="{openOptions:false}" @click.away="openOptions = false"
                     class="flex-shrink-0 pr-2">

@@ -16,9 +16,11 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('system');
             $table->string('logo');
-            $table->string('bg_ground');
+            $table->string('bg_image');
             $table->string('address');
+            $table->string('developer');
             $table->timestamps();
         });
     }

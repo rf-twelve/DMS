@@ -51,6 +51,12 @@ class User extends Authenticatable
             ? Storage::disk('images')->url($this->avatar)
             : asset('img/users/avatar.png');
     }
+    public function officeName()
+    {
+        return $this->office_id
+            ? (Office::find($this->office_id))->name
+            : 'Unknown';
+    }
 
     protected $casts = [
         'email_verified_at' => 'datetime',

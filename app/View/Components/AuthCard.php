@@ -2,6 +2,7 @@
 
 namespace App\View\Components;
 
+use App\Models\Company;
 use Illuminate\View\Component;
 
 class AuthCard extends Component
@@ -23,6 +24,9 @@ class AuthCard extends Component
      */
     public function render()
     {
-        return view('components.auth-card');
+
+        return view('components.auth-card',[
+            "company"=>Company::find(1),
+        ]);
     }
 }

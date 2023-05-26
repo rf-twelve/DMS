@@ -2,6 +2,7 @@
 
 namespace App\View\Components;
 
+use App\Models\Company;
 use Illuminate\View\Component;
 
 class SidebarDesktop extends Component
@@ -23,6 +24,9 @@ class SidebarDesktop extends Component
      */
     public function render()
     {
-        return view('components.sidebar-desktop');
+
+        return view('components.sidebar-desktop',[
+            'company'=>Company::find(1),
+        ]);
     }
 }
