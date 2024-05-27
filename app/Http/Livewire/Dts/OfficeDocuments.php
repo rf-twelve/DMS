@@ -7,7 +7,6 @@ use Livewire\WithFileUploads;
 use App\Http\Livewire\DataTable\WithPerPagePagination;
 use App\Http\Livewire\DataTable\WithBulkActions;
 use App\Http\Livewire\DataTable\WithCachedRows;
-use App\Models\AuditTrail;
 use App\Models\Doc;
 use App\Models\Office;
 use App\Models\User;
@@ -191,7 +190,7 @@ class OfficeDocuments extends Component
     {
 
         return Doc::query()
-            ->with('action_takens', 'audit_trails')
+            ->with('doc_actions', 'doc_tracks')
             ->where('author_office',auth()->user()->office_id)
             ->where('type','office')
             ->when($this->filters['search'], fn($query, $search) => $query->where($this->sortField, 'like','%'.$search.'%'))
@@ -214,5 +213,9 @@ class OfficeDocuments extends Component
             'offices' => Office::get(),
             'user_list' => User::get()->toArray(),
         ]);
+    }
+
+    public function logout() {
+        auth()->logout(); return redirect('/');
     }
 }

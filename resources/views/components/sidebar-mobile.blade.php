@@ -15,8 +15,8 @@
 
         <div class="flex items-center flex-shrink-0 px-4">
             <img class="w-auto h-8"
-                src="{{ asset(env('APP_LOGO')) }}" alt="Logo">
-                <span class="font-serif font-bold text-1xl">{{ env('APP_CLIENT') }}</span>
+                src="{{ url('img/dts/logo.png') }}" alt="Logo">
+                <span class="font-serif font-bold text-1xl">LGU KALIBO</span>
         </div>
 
         <x-sidebar-content />

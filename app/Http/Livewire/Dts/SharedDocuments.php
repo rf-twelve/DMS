@@ -218,4 +218,7 @@ class SharedDocuments extends Component
             'user_list' => User::get()->toArray(),
         ]);
     }
+    public function logout() {
+        auth()->logout(); return redirect('/');
+    }
 }

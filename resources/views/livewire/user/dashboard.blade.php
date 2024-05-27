@@ -29,6 +29,10 @@
                             </a>
                         </div>
                     </li>
+
+                    <x-slot name="pending_notif">
+                        {{ $pending_count }}
+                    </x-slot>
                 </x-topbar-desktop>
 
                 <!-- Dashboard Status -->

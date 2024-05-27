@@ -2,10 +2,9 @@
 
 namespace App\View\Components;
 
-use App\Models\Company;
 use Illuminate\View\Component;
 
-class AuthCard extends Component
+class TopbarDesktopNav extends Component
 {
     /**
      * Create a new component instance.
@@ -24,9 +23,6 @@ class AuthCard extends Component
      */
     public function render()
     {
-
-        return view('components.auth-card',[
-            // "company"=>Company::find(1),
-        ]);
+        return view('components.topbar-desktop-nav');
     }
 }

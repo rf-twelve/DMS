@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('audit_trails', function (Blueprint $table) {
             $table->id();
             $table->timestamp('date_time')->nullable();
-            $table->string('trail');
+            $table->string('status');
             $table->unsignedInteger('office_id')->nullable();
             $table->unsignedInteger('user_id')->nullable();
             $table->timestamp('start', $precision = 0)->nullable();

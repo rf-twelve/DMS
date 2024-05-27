@@ -4,7 +4,7 @@
         <div class="flex items-center justify-between w-full p-6 space-x-6">
             <div class="flex-1 truncate">
                 <div class="flex items-center space-x-3">
-                    <h2 class="text-sm font-medium text-gray-900 truncate">TRACK DOCUMENT</h2>
+                    <h2 class="text-sm font-medium text-gray-900 truncate">TRACK DOCUMENTS</h2>
                 </div>
                 <p class="mt-1 text-sm text-gray-500">Trace the location of document.</p>
             </div>

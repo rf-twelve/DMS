@@ -1,11 +1,10 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Icon;
 
-use App\Models\Company;
 use Illuminate\View\Component;
 
-class AuthCard extends Component
+class ClipboardDocumentList extends Component
 {
     /**
      * Create a new component instance.
@@ -24,9 +23,6 @@ class AuthCard extends Component
      */
     public function render()
     {
-
-        return view('components.auth-card',[
-            // "company"=>Company::find(1),
-        ]);
+        return view('components.icon.clipboard-document-list');
     }
 }

@@ -21,7 +21,7 @@
                             <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
                         </svg>
                         <a href="#" class="ml-4 text-sm font-medium text-white hover:text-blue-200">
-                            Office Documents
+                            Received/Release Documents
                         </a>
                     </div>
                 </li>
@@ -42,10 +42,11 @@
                 </div>
                 <div class="flex justify-between px-2 my-2 space-x-2">
                     <div>
-                        <x-button wire:click="create"
-                            class="relative inline-flex items-center px-2 py-2 text-sm font-medium text-gray-600 bg-white border border-transparent border-gray-300 shadow-sm hover:text-white w-max rounded-xl hover:bg-blue-500">
-                            <x-icon.plus class="w-5 h-5" /> <span>Create</span>
-                        </x-button>
+                        <span>Select Status: </span>
+                        <x-select wire:model="filters.status" id="status">
+                            <option value="received">Received</option>
+                            <option value="released">Released</option>
+                        </x-select>
                     </div>
                     <div class="flex justify-end space-x-1">
                         <div>
@@ -147,23 +148,9 @@
                                             <ul class="py-1">
                                                 <li>
                                                     <a href="{{ route('document-overview',['user_id'=>auth()->user()->id,'id'=>$item->id]) }}"
-                                                        target="_blank" class="flex items-center px-2 py-1 hover:bg-blue-500 hover:text-white">
+                                                        class="flex items-center px-2 py-1 hover:bg-blue-500 hover:text-white">
                                                         <x-icon.view class="w-5 h-5 mr-2" />
                                                         <span>View</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="{{ route('document-overview',['user_id'=>auth()->user()->id,'id'=>$item->id]) }}"
-                                                        target="_blank" class="flex items-center px-2 py-1 hover:bg-blue-500 hover:text-white">
-                                                        <x-icon.edit class="w-5 h-5 mr-2" />
-                                                        <span>Edit</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a wire:click="toggleDeleteSingleRecordModal({{ $item->id }})"
-                                                        href="#" class="flex items-center px-2 py-1 hover:bg-blue-500 hover:text-white">
-                                                        <x-icon.trash class="w-5 h-5 mr-2" />
-                                                        <span>Delete</span>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -171,16 +158,21 @@
                                     </div>
                                 </x-table.cell>
                                 <x-table.cell>
-                                    <span>{{ $item->date }}</span>
+                                    <span>{{ $item['date'] }}</span>
                                 </x-table.cell>
                                 <x-table.cell>
-                                    <span>{{ $item->tn }}</span>
+                                    <div>
+                                    <span>{{ $item['tn'] }}</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 capitalize">
+                                        {{ $item->doc_actions->last()['status'] }}
+                                      </span>
+                                    </div>
                                 </x-table.cell>
                                 <x-table.cell>
-                                    <span>{{ Str::of($item->origin)->limit(30) }}</span>
+                                    <span>{{ Str::of($item['origin'])->limit(30) }}</span>
                                 </x-table.cell>
                                 <x-table.cell>
-                                    <span>{{ Str::of($item->nature)->limit(30) }}</span>
+                                    <span>{{ Str::of($item['nature'])->limit(30) }}</span>
                                 </x-table.cell>
                                 <x-table.cell>
                                     <span>{{ $item->DocumentClass }}</span>

@@ -8,7 +8,9 @@ use App\Http\Livewire\Dts\DocumentEdit;
 use App\Http\Livewire\Dts\DocumentOverview;
 use App\Http\Livewire\Dts\MyDocuments;
 use App\Http\Livewire\Dts\OfficeDocuments;
+use App\Http\Livewire\Dts\PendingDocument;
 use App\Http\Livewire\Dts\PrivacyPolicy;
+use App\Http\Livewire\Dts\ReceivedDocument;
 use App\Http\Livewire\Dts\SharedDocuments;
 use App\Http\Livewire\Settings\CompanyProfile;
 use App\Http\Livewire\User\Dashboard as UserDashboard;
@@ -18,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\Settings\ProfileSettings;
 use App\Http\Livewire\Settings\UsersManagement;
 use App\Http\Livewire\Settings\Users as UserSettings;
+use App\Http\Livewire\TerminalDocument;
 use App\Models\Office;
 use App\Models\User;
 
@@ -57,6 +60,10 @@ Route::group(['prefix' => 'user',  'middleware' => 'auth'], function()
     Route::get('{user_id}/my-documents', MyDocuments::class)->name('my-documents');
     Route::get('{user_id}/office-documents', OfficeDocuments::class)->name('office-documents');
     Route::get('{user_id}/shared-documents', SharedDocuments::class)->name('shared-documents');
+    Route::get('{user_id}/pending-documents', PendingDocument::class)->name('pending-documents');
+    Route::get('{user_id}/received-documents', ReceivedDocument::class)->name('received-documents');
+    Route::get('{user_id}/terminal-documents', TerminalDocument::class)->name('terminal-documents');
+
     Route::get('{user_id}/document/{id}', DocumentOverview::class)->name('document-overview');
     Route::get('{user_id}/document/{tn}/create', DocumentCreate::class)->name('create-document');
     Route::get('{user_id}/document/{id}/edit', DocumentEdit::class)->name('edit-document');

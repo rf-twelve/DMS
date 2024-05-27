@@ -4,7 +4,7 @@
         <main class="flex-1">
 
             <!-- Topbar Desktop -->
-            <x-topbar-desktop-nav>
+            <x-topbar-desktop>
                 <li class="flex">
                     <div class="flex items-center">
                         <svg class="flex-shrink-0 w-6 h-full text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" xmlns="http://www.w3.org/2000/svg"aria-hidden="true">
@@ -21,10 +21,13 @@
                             <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
                         </svg>
                         <a href="#" class="ml-4 text-sm font-medium text-white hover:text-blue-200">
-                            Office Documents
+                            Pending Documents
                         </a>
                     </div>
                 </li>
+                <x-slot name="pending_notif">
+                    {{ $pending_count }}
+                </x-slot>
             </x-topbar-desktop>
             <div class="sm:flex">
                 <div class="flex items-center flex-1 my-2">
@@ -146,24 +149,10 @@
                                             class="absolute my-2 text-base list-none bg-gray-100 divide-y divide-gray-100 rounded shadow">
                                             <ul class="py-1">
                                                 <li>
-                                                    <a href="{{ route('document-overview',['user_id'=>auth()->user()->id,'id'=>$item->id]) }}"
-                                                        target="_blank" class="flex items-center px-2 py-1 hover:bg-blue-500 hover:text-white">
-                                                        <x-icon.view class="w-5 h-5 mr-2" />
-                                                        <span>View</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="{{ route('document-overview',['user_id'=>auth()->user()->id,'id'=>$item->id]) }}"
-                                                        target="_blank" class="flex items-center px-2 py-1 hover:bg-blue-500 hover:text-white">
-                                                        <x-icon.edit class="w-5 h-5 mr-2" />
-                                                        <span>Edit</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a wire:click="toggleDeleteSingleRecordModal({{ $item->id }})"
-                                                        href="#" class="flex items-center px-2 py-1 hover:bg-blue-500 hover:text-white">
-                                                        <x-icon.trash class="w-5 h-5 mr-2" />
-                                                        <span>Delete</span>
+                                                    <a wire:click="toggleReceived('{{ $item->id }}')"  href="#"
+                                                        class="flex items-center px-2 py-1 hover:bg-blue-500 hover:text-white">
+                                                        <x-icon.circle-check class="w-5 h-5 mr-2" />
+                                                        <span>Received</span>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -171,22 +160,22 @@
                                     </div>
                                 </x-table.cell>
                                 <x-table.cell>
-                                    <span>{{ $item->date }}</span>
+                                    <span>{{ $item->document['date'] }}</span>
                                 </x-table.cell>
                                 <x-table.cell>
-                                    <span>{{ $item->tn }}</span>
+                                    <span>{{ $item->document['tn'] }}</span>
                                 </x-table.cell>
                                 <x-table.cell>
-                                    <span>{{ Str::of($item->origin)->limit(30) }}</span>
+                                    <span>{{ Str::of($item->document['origin'])->limit(30) }}</span>
                                 </x-table.cell>
                                 <x-table.cell>
-                                    <span>{{ Str::of($item->nature)->limit(30) }}</span>
+                                    <span>{{ Str::of($item->document['nature'])->limit(30) }}</span>
                                 </x-table.cell>
                                 <x-table.cell>
-                                    <span>{{ $item->DocumentClass }}</span>
+                                    <span>{{ $item->document->DocumentClass }}</span>
                                 </x-table.cell>
                                 <x-table.cell>
-                                    <span>{{ $item->DocumentType }}</span>
+                                    <span>{{ $item->document->DocumentType }}</span>
                                 </x-table.cell>
                                 {{-- <x-table.cell>
                                     <span>{{ $item->status }}</span>

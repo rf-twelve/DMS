@@ -7,13 +7,17 @@ use Livewire\WithFileUploads;
 use App\Http\Livewire\DataTable\WithPerPagePagination;
 use App\Http\Livewire\DataTable\WithBulkActions;
 use App\Http\Livewire\DataTable\WithCachedRows;
-use App\Models\AuditTrail;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use App\Models\Doc;
+use App\Models\DocAction;
 use App\Models\Office;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
-class MyDocuments extends Component
+
+class PendingDocument extends Component
 {
     use WithFileUploads, WithPerPagePagination, WithBulkActions, WithCachedRows;
 
@@ -35,6 +39,8 @@ class MyDocuments extends Component
     public $office;
     public $viewing = [];
     public $timeline = [];
+    public $office_list;
+    public $user_list;
     public $imports = [
         'count' => 0,
         'file',
@@ -51,7 +57,10 @@ class MyDocuments extends Component
     protected $queryString = ['sortField','sortDirection'];
 
 
-    // public function mount() { $this->editing = $this->makeTemporaryFormData(); }
+    public function mount() {
+        $this->office_list = Office::get();
+        $this->user_list = User::get();
+    }
 
     public function updatedFilters() { $this->resetPage(); }
 
@@ -189,13 +198,12 @@ class MyDocuments extends Component
 
     public function getRowsQueryProperty()
     {
-
-        return Doc::query()
-            ->with('action_takens', 'audit_trails')
-            ->where('author_id',auth()->user()->id)
-            ->where('type','draft')
+        return DocAction::query()
+            ->with('document')
+            ->where('is_received', '0')
+            ->where('status', 'pending')
+            ->where('refer_to', auth()->user()->id)
             ->when($this->filters['search'], fn($query, $search) => $query->where($this->sortField, 'like','%'.$search.'%'))
-            // ->where('for', 'act')
             ->orderBy($this->sortField, $this->sortDirection);
     }
 
@@ -208,15 +216,64 @@ class MyDocuments extends Component
 
     public function render()
     {
-        // dd($this->rows);
-        return view('livewire.dts.my-documents',[
+        // $data = $this->rows->first();
+        // dd($data);
+        return view('livewire.dts.pending-document',[
             'docs' => $this->rows,
-            'offices' => Office::get(),
-            'user_list' => User::get()->toArray(),
+            'pending_count' => $this->rows->count(),
         ]);
     }
 
     public function logout() {
         auth()->logout(); return redirect('/');
     }
+
+    ## Use Controls
+    public function toggleReceived($id)
+    {
+        ## Find Record
+        $doc_act = DocAction::find($id);
+
+        ## Initiate details
+        $date = date('Y-m-d');
+        $time = date('H:i:s');
+        $refer_fr_name = Str::upper($doc_act->ReferFromFullname);
+        $refer_to_name = Str::upper($doc_act->ReferToFullname);
+        $details = 'Received by '.$refer_to_name
+            .' from '.$refer_fr_name.'.';
+
+        $doc_act->update([
+            'status' => 'received',
+            'is_received' => '1',
+        ]);
+
+        $doc_tracks = $doc_act->document->doc_tracks()->create([
+            'date' => $date,
+            'time' => $time,
+            'time_elapse' => 'N/A',
+            'details' => $details
+        ]);
+
+        // DocAction::find($id)->update([
+        //     'status' => 'received',
+        //     'is_received' => '1',
+        // ]);
+        // $doc->doc_tracks()->create([
+        //     'date' => $validatedData['date'],
+        //     'time' => $validatedData['time'],
+        //     'time_elapse' => 'N/A',
+        //     'details' => $details
+        // ]);
+        // $doc_tracks = $doc_act->document->doc_tracks->create([
+        //     'date' => $date,
+        //     'time' => $time,
+        //     'time_elapse' => 'N/A',
+        //     'details' => $details
+        // ]);
+        // dd($doc_tracks);
+        $this->notify('You\'ve received document successfully.');
+    }
+
+
+
 }

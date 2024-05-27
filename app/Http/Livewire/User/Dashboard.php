@@ -4,6 +4,7 @@ namespace App\Http\Livewire\User;
 
 use App\Models\AuditTrail;
 use App\Models\Doc;
+use App\Models\DocAction;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use DateTime;
@@ -149,8 +150,13 @@ class Dashboard extends Component
     }
     public function render()
     {
+        $pendingCount = DocAction::where('is_received', '0')
+            ->where('status', 'pending')
+            ->where('refer_to', auth()->user()->id)
+            ->count();
         // dd(date("Y-m-d-His") ); // Generate Tracking Number
         return view('livewire.user.dashboard',[
+            'pending_count' => $pendingCount,
         ]);
     }
 

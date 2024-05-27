@@ -13,19 +13,23 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('doc_trackings', function (Blueprint $table) {
+        Schema::create('doc_actions', function (Blueprint $table) {
             $table->id();
-            $table->string('date')->nullable();
-            $table->string('time')->nullable();
-            $table->string('time_elapse')->nullable();
-            $table->string('details')->nullable();
-            $table->timestamps();
+            // $table->timestamp('date_time', $precision = 0)->nullable();
+            $table->unsignedBigInteger('office_id');
+            $table->string('is_received');
+            $table->string('status');
+            $table->string('refer_from');
+            $table->string('refer_to');
+            $table->string('action_taken')->nullable();
+            $table->string('remarks')->nullable();
             $table->unsignedBigInteger('doc_id')->index();
             $table->foreign('doc_id')
                 ->references('id')
                 ->on('docs')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -36,6 +40,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('doc_trackings');
+        Schema::dropIfExists('doc_actions');
     }
 };

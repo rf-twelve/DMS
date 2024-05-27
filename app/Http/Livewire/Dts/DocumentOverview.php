@@ -28,8 +28,8 @@ class DocumentOverview extends Component
     public $updated_by;
 
     public $docs;
-    public $action_takens;
-    public $tracks;
+    public $doc_actions;
+    public $doc_tracks;
     public $images;
     public $offices;
     public $showDeleteSelectedRecordModal = false;
@@ -43,10 +43,11 @@ class DocumentOverview extends Component
     public function setFields($id)
     {
         $this->docs = Doc::query()
-            ->with('action_takens', 'tracks','images','offices')
+            ->with('doc_actions', 'doc_tracks','images','offices')
             ->find($id);
-        $this->action_takens = $this->docs->action_takens;
-        $this->tracks = $this->docs->tracks;
+        // dd($this->docs);
+        $this->doc_actions = $this->docs->doc_actions;
+        $this->doc_tracks = $this->docs->doc_tracks;
         $this->images = $this->docs->images;
         $this->offices = $this->docs->offices;
         $this->tn = $this->docs['tn'];

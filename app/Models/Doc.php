@@ -36,8 +36,10 @@ class Doc extends Model
         'u' => 'Unclassified',
         ];
 
+
     const Document_For = [
         'sign' => 'Signature',
+        'aprove' => 'Aproval',
         'act' => 'Appropriate Action',
         'endorse' => 'Endorsement/Recomendation',
         'file' => 'Filing/Keep',
@@ -46,10 +48,11 @@ class Doc extends Model
     ];
 
     const Document_Status = [
-        'origin' => 'Originated',
+        'pending' => 'Pending',
         'received' => 'Received',
+        'ongoing' => 'Ongoing',
         'released' => 'Released',
-        'terminal' => 'Terminal',
+        'completed' => 'Completed',
     ];
 
     public function getAuthorFullnameAttribute(){
@@ -57,7 +60,7 @@ class Doc extends Model
     }
 
     public function getDocumentTypeAttribute(){
-        return Doc::Document_Type[$this->for] ?? '(Unknown)';
+        return Doc::Document_Type[$this->type] ?? '(Unknown)';
     }
 
     public function getDocumentForAttribute(){
@@ -79,6 +82,16 @@ class Doc extends Model
 
     public function getOfficeNameAttribute(){
         return Office::find($this->office_id) ? (Office::find($this->office_id))->name : '(Unknown)';
+    }
+
+    public function doc_actions()
+    {
+        return $this->hasMany(DocAction::class);
+    }
+
+    public function doc_tracks()
+    {
+        return $this->hasMany(DocTracking::class);
     }
 
     public function action_takens()

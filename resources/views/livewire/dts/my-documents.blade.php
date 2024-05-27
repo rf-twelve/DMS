@@ -88,8 +88,7 @@
                 <div class="min-w-full overflow-hidden overflow-x-scroll align-middle shadow">
                     <x-table>
                         <x-slot name="head">
-                            <x-table.head class="px-2 py-1">
-                                <x-checkbox wire:model="selectPage" /></x-table.head>
+                            <x-table.head class="px-2 py-1"></x-table.head>
 
                             <x-table.head class="px-2 py-1" sortable wire:click="sortBy('date')"
                                 :direction="$sortField === 'date' ? $sortDirection : null">Date</x-table.head>
@@ -114,8 +113,6 @@
 
                             <x-table.head class="px-2 py-1" sortable wire:click="sortBy('status')"
                                 :direction="$sortField === 'status' ? $sortDirection : null">Status</x-table.head>
-
-                            <x-table.head class="w-10 px-6 py-1"><span class="sr-only">Edit</span></x-table.head>
                         </x-slot>
 
                         <x-slot name="body">
@@ -138,7 +135,42 @@
                             @forelse ($docs as $item)
                             <x-table.row wire:loading.class.delay="opacity-50" wire:key="row-{{ $item->id }}" class="text-gray-600 hover:bg-blue-100">
                                 <x-table.cell class="w-6 pl-2 pr-0">
-                                    <x-checkbox wire:model="selected" value="{{ $item->id }}" />
+                                        <div x-data="{ option_list: false }"  class="max-w-lg mx-auto">
+                                            <a x-on:click="option_list = ! option_list" href="#"
+                                                class="flex p-1 bg-gray-300 rounded-md">
+                                                <x-icon.dots-vertical class="w-4 h-4" />
+                                                <div :class="option_list ? 'rotate-90' : ''">
+                                                    <x-icon.chevron-right class="w-4 h-4" />
+                                                </div>
+                                            </a>
+                                            <!-- Dropdown menu -->
+                                            <div x-show="option_list" @click.away="option_list = false"
+                                                class="absolute my-2 text-base list-none bg-gray-100 divide-y divide-gray-100 rounded shadow">
+                                                <ul class="py-1">
+                                                    <li>
+                                                        <a href="{{ route('document-overview',['user_id'=>auth()->user()->id,'id'=>$item->id]) }}"
+                                                            target="_blank" class="flex items-center px-2 py-1 hover:bg-blue-500 hover:text-white">
+                                                            <x-icon.view class="w-5 h-5 mr-2" />
+                                                            <span>View</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{ route('document-overview',['user_id'=>auth()->user()->id,'id'=>$item->id]) }}"
+                                                            target="_blank" class="flex items-center px-2 py-1 hover:bg-blue-500 hover:text-white">
+                                                            <x-icon.edit class="w-5 h-5 mr-2" />
+                                                            <span>Edit</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a wire:click="toggleDeleteSingleRecordModal({{ $item->id }})"
+                                                            href="#" class="flex items-center px-2 py-1 hover:bg-blue-500 hover:text-white">
+                                                            <x-icon.trash class="w-5 h-5 mr-2" />
+                                                            <span>Delete</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
                                 </x-table.cell>
                                 <x-table.cell>
                                     <span>{{ $item->date }}</span>
@@ -147,13 +179,13 @@
                                     <span>{{ $item->tn }}</span>
                                 </x-table.cell>
                                 <x-table.cell>
-                                    <span>{{ $item->title }}</span>
+                                    <span>{{ Str::of($item->title)->limit(25) }}</span>
                                 </x-table.cell>
                                 <x-table.cell>
-                                    <span>{{ $item->origin }}</span>
+                                    <span>{{ Str::of($item->origin)->limit(25) }}</span>
                                 </x-table.cell>
                                 <x-table.cell>
-                                    <span>{{ $item->nature }}</span>
+                                    <span>{{ Str::of($item->nature)->limit(25) }}</span>
                                 </x-table.cell>
                                 <x-table.cell>
                                     <span>{{ $item->DocumentClass }}</span>
@@ -163,22 +195,6 @@
                                 </x-table.cell>
                                 <x-table.cell>
                                     <span>{{ $item->status }}</span>
-                                </x-table.cell>
-                                <x-table.cell class="max-w-2xl">
-                                    <div class="flex justify-center space-x-2">
-                                        {{-- View --}}
-                                        <a href="{{ route('document-overview',['user_id'=>auth()->user()->id,'id'=>$item->id]) }}" class="px-2 py-2 text-sm font-medium text-center text-gray-700 bg-white border border-gray-300 shadow-sm hover:text-white hover:bg-green-500 rounded-xl">
-                                            <x-icon.view class="w-5 h-5" /></a>
-                                        {{-- Edit --}}
-                                        @if ($item->author_id == auth()->user()->id)
-                                            <a href="{{ route('edit-document',['user_id'=>auth()->user()->id,'id'=>$item->id]) }}" class="px-2 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 shadow-sm hover:text-white hover:bg-blue-500 rounded-xl">
-                                            <x-icon.edit class="w-5 h-5" /></a>
-                                        @endif
-
-                                        {{-- DELETE --}}
-                                        <x-button class="px-2 rounded-xl hover:text-white hover:bg-red-500" wire:click="toggleDeleteSingleRecordModal({{ $item->id }})">
-                                            <x-icon.trash class="w-5 h-5" /></x-button>
-                                    </div>
                                 </x-table.cell>
                             </x-table.row>
                             @empty
